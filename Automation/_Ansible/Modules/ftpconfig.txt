@@ -1,0 +1,28 @@
+---
+- name: Backup Cisco IOS running configuration to FTP
+  hosts: 
+    - ctaas
+    - cbaba
+    - cucm
+    - edge
+  gather_facts: no
+  become: yes
+  
+  vars:
+    ftp_server_ip: "10.92.1.10" 
+    ftp_username: "administrator"
+    ftp_password: "C1sc0123"
+    backup_filename: "{{ inventory_hostname }}-running-config.txt"
+  
+  tasks:
+    - name: FTP Transfer for Cisco IOS
+      ios_command:
+        commands:
+          - command: 'copy run ftp://{{ ftp_server_ip }}/{{ backup_filename }}'
+            prompt:
+              - 'Address or name of remote host'
+              - 'Destination filename'
+            answer:
+              - '{{ ftp_server_ip }}'
+              - '{{ backup_filename }}'
+            check_all: True

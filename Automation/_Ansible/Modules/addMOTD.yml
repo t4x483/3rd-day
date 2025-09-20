@@ -1,0 +1,20 @@
+---
+- name: Add Banner
+  hosts: onprem
+  gather_facts: no
+  become: yes
+  tasks: 
+    - name: Remove the motd banner
+      cisco.ios.ios_banner:
+        banner: motd
+        state: absent
+
+    - name: Configure the login banner
+      cisco.ios.ios_banner:
+        banner: login
+        text: |
+          **********************************
+          Rivan Corporation Cyber Institute
+          Copyright and Owned by RivanCorp
+          **********************************
+        state: present

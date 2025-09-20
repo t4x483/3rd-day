@@ -1,0 +1,38 @@
+---
+- name: Add Users
+  hosts: onprem
+  gather_facts: no
+  become: yes
+
+  vars:
+    acc_1:
+      user: user1
+      pass: pass
+    acc_2:
+      user: user2
+      pass: pass
+    acc_3:
+      user: user3
+      pass: pass
+      
+  tasks: 
+    - name: Create User Accounts
+      cisco.ios.ios_user:
+        name: '{{ acc_1.user }}'
+        configured_password: '{{ acc_1.pass }}'
+        privilege: 15
+        state: present
+
+    - name: Create User art
+      cisco.ios.ios_user:
+        name: '{{ acc_2.user }}'
+        configured_password: '{{ acc_2.pass }}'
+        privilege: 15
+        state: present
+
+    - name: Create User user123
+      cisco.ios.ios_user:
+        name: '{{ acc_3.user }}'
+        configured_password: '{{ acc_3.pass }}'
+        privilege: 15
+        state: present

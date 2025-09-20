@@ -1,0 +1,70 @@
+---
+- name: Create user accounts
+  hosts: netops
+  become: yes
+  gather_facts: no
+
+  vars:
+    secured_password: pass
+
+  tasks:
+    - name: Create a new user
+      ansible.builtin.user:
+        name: usertest2
+        comment: "New User Account"
+        shell: /bin/bash
+        home: /home/newuser
+        create_home: true
+        password: C1sc0123
+        state: present
+        update_password: on_create
+
+    - name: Create another user with specific UID and groups
+      ansible.builtin.user:
+        name: anotheruser
+        uid: 1001
+        groups: "wheel"
+        append: true
+        state: present
+
+
+
+
+
+
+
+---
+
+   - hosts: appserver1
+      vars_files: 
+        - secret.yml
+        - userlist.yml
+    
+      tasks:
+        - name: "create group" 
+          group:
+            name: "{{ item  }}"  
+          loop: 
+              - "dev"
+              - "devops"
+          
+        - name: "create user when Job=developer from userlist.yml file with password from secret.yml file and add to secondary group 'dev' "
+          user: 
+            name: "{{ item['name'] }}"
+            password: "{{ user_password | password_hash('sha512')  }}"   
+            update_password: on_create 
+            groups: "dev"
+            append: yes
+          loop: "{{ users }}"
+          when: "item['job'] == 'developer'"
+    
+    
+        - name: "create user when Job=devops from userlist.yml file with password from secret.yml file and add to secondary group 'devops' "
+          user:
+            name: "{{ item['name']  }}"
+            password: "{{ user_password | password_hash('sha512')  }}"
+            update_password: on_create
+            groups: "devops"
+            append: yes
+          loop: "{{ users }}"
+          when: "item['job'] == 'devops'"
