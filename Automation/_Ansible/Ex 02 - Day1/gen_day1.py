@@ -478,6 +478,14 @@ class GeneratePlaybook:
                         'destination-pattern 82..',
                         'session target ipv4:10.82.100.8',
                         'codec g711ULAW',
+                        'dial-peer voice 91 Voip',
+                        'destination-pattern 91..',
+                        'session target ipv4:10.91.100.8',
+                        'codec g711ULAW',
+                        'dial-peer voice 92 Voip',
+                        'destination-pattern 92..',
+                        'session target ipv4:10.92.100.8',
+                        'codec g711ULAW',
                         'end'
                     ]
                 },
@@ -579,7 +587,7 @@ class GeneratePlaybook:
                         'ip route 10.21.0.0 255.255.0.0 200.0.0.21 254',
                         'ip route 10.22.0.0 255.255.0.0 200.0.0.22 254',
                         'ip route 10.31.0.0 255.255.0.0 200.0.0.31 254',
-                        f'ip route 10.{self.m}.0.0 255.255.0.0 200.0.0.{self.m} 254',
+                        'ip route 10.32.0.0 255.255.0.0 200.0.0.32 254',
                         'ip route 10.41.0.0 255.255.0.0 200.0.0.41 254',
                         'ip route 10.42.0.0 255.255.0.0 200.0.0.42 254',
                         'ip route 10.51.0.0 255.255.0.0 200.0.0.51 254',
@@ -590,7 +598,7 @@ class GeneratePlaybook:
                         'ip route 10.72.0.0 255.255.0.0 200.0.0.72 254',
                         'ip route 10.81.0.0 255.255.0.0 200.0.0.81 254',
                         'ip route 10.82.0.0 255.255.0.0 200.0.0.82 254',
-                        f'ip route 10.{self.m}.0.0 255.255.0.0 10.{self.m}.{self.m}.4 254',
+                        f'ip route 10.{self.m}.0.0 255.255.0.0 10.{self.m}.{self.m}.4 253',
                         'end'
                     ]
                 },

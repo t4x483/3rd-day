@@ -109,6 +109,7 @@ corebaba_config = [
     f'default-router 10.{user_m}.10.4',
     'domain-name WIFIDATA.COM',
     f'dns-server 10.{user_m}.1.10',
+    f'option 43 ip 10.{user_m}.10.{user_m}',
     'exit',
 
     'ip dhcp pool POOLCCTV',
@@ -174,6 +175,10 @@ corebaba_config = [
     f'client-identifier {cam8_mac}',
     'exit',
     
+    # static routing
+    'ip routing',
+    f'ip route 0.0.0.0 0.0.0.0 10.{user_m}.{user_m}.1 254',
+
     # dynamic routing
     'router ospf 1',
     f'router-id 10.{user_m}.{user_m}.4',
@@ -332,6 +337,14 @@ cucm_config = [
     'destination-pattern 82..',
     'session target ipv4:10.82.100.8',
     'codec g711ULAW',
+    'dial-peer voice 91 Voip',
+    'destination-pattern 91..',
+    'session target ipv4:10.91.100.8',
+    'codec g711ULAW',
+    'dial-peer voice 91 Voip',
+    'destination-pattern 92..',
+    'session target ipv4:10.92.100.8',
+    'codec g711ULAW',
     'exit',
     
     # -configure ivrs
@@ -373,6 +386,10 @@ cucm_config = [
     'param number-of-hunt-grps 4',
     'exit',
 
+    # static routing
+    'ip routing',
+    f'ip route 0.0.0.0 0.0.0.0 10.{user_m}.100.4 254',
+
     # dynamic routing
     'router ospf 1',
     f'router-id 10.{user_m}.100.8',
@@ -409,23 +426,23 @@ edge_config = [
     
     # floating static route to other pcs
     'ip routing',
-    'ip route 10.11.0.0 255.255.0.0 200.0.0.11',
-    'ip route 10.12.0.0 255.255.0.0 200.0.0.12',
-    'ip route 10.21.0.0 255.255.0.0 200.0.0.21',
-    'ip route 10.22.0.0 255.255.0.0 200.0.0.22',
-    'ip route 10.31.0.0 255.255.0.0 200.0.0.31',
-    'ip route 10.32.0.0 255.255.0.0 200.0.0.32',
-    'ip route 10.41.0.0 255.255.0.0 200.0.0.41',
-    'ip route 10.42.0.0 255.255.0.0 200.0.0.42',
-    'ip route 10.51.0.0 255.255.0.0 200.0.0.51',
-    'ip route 10.52.0.0 255.255.0.0 200.0.0.52',
-    'ip route 10.61.0.0 255.255.0.0 200.0.0.61',
-    'ip route 10.62.0.0 255.255.0.0 200.0.0.62',
-    'ip route 10.71.0.0 255.255.0.0 200.0.0.71',
-    'ip route 10.72.0.0 255.255.0.0 200.0.0.72',
-    'ip route 10.81.0.0 255.255.0.0 200.0.0.81',
-    'ip route 10.82.0.0 255.255.0.0 200.0.0.82',
-    'ip route 10.52.0.0 255.255.0.0 10.52.52.4',
+    'ip route 10.11.0.0 255.255.0.0 200.0.0.11 254',
+    'ip route 10.12.0.0 255.255.0.0 200.0.0.12 254',
+    'ip route 10.21.0.0 255.255.0.0 200.0.0.21 254',
+    'ip route 10.22.0.0 255.255.0.0 200.0.0.22 254',
+    'ip route 10.31.0.0 255.255.0.0 200.0.0.31 254',
+    'ip route 10.32.0.0 255.255.0.0 200.0.0.32 254',
+    'ip route 10.41.0.0 255.255.0.0 200.0.0.41 254',
+    'ip route 10.42.0.0 255.255.0.0 200.0.0.42 254',
+    'ip route 10.51.0.0 255.255.0.0 200.0.0.51 254',
+    'ip route 10.52.0.0 255.255.0.0 200.0.0.52 254',
+    'ip route 10.61.0.0 255.255.0.0 200.0.0.61 254',
+    'ip route 10.62.0.0 255.255.0.0 200.0.0.62 254',
+    'ip route 10.71.0.0 255.255.0.0 200.0.0.71 254',
+    'ip route 10.72.0.0 255.255.0.0 200.0.0.72 254',
+    'ip route 10.81.0.0 255.255.0.0 200.0.0.81 254',
+    'ip route 10.82.0.0 255.255.0.0 200.0.0.82 254',
+    f'ip route 10.{user_m}.0.0 255.255.0.0 10.{user_m}.{user_m}.4 253',
     
     # dynamic routing
     'router ospf 1',
@@ -437,3 +454,4 @@ edge_config = [
     'ip ospf network point-to-point',
     'exit'
 ]
+
