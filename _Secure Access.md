@@ -673,14 +673,17 @@ IP.1    = 10.#$34T#.1.6
 &nbsp;
 
 ### 04. Generate root CA with subject alt names
+~~~
 !@NetOps
 openssl req -x509 -newkey rsa:2048 -days 365 -keyout rivan.key -out ca-rivan.crt -nodes -config ext.cnf -extensions v3_req
+~~~
 
-Verify:
+&nbsp;
+---
+&nbsp;
 
-
-5. Import CA to Cisco Devices
-
+### 05. Import CA to Cisco Devices
+~~~
 !@VPN-PH
 conf t
  crypto pki trustpoint rivantrust
@@ -696,8 +699,11 @@ conf t
   exit
  crypto pki authenticate rivantrust
 > Paste the CA
+~~~
 
+<br>
 
+~~~
 !@VPN-JP
 conf t
  crypto pki trustpoint rivantrust
@@ -713,34 +719,56 @@ conf t
   exit
  crypto pki authenticate rivantrust
 > Paste the CA
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-6. Generate a CSR for both Routers
+### 06. Generate a CSR for both Routers
+~~~
 !@VPN-PH, VPN-JP
 crypto pki enroll rivantrust
 
 > Outputs a CSR . Must be signed by the CA
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-7. Import the CSR to the CA Server (NetOps)
+### 07. Import the CSR to the CA Server (NetOps)
+~~~
 !@NetOps
 nano req-ph.pem
 > paste VPN-PH's CSR
 > ctrl + s (save)
 > ctrl + x (exit)
+~~~
 
+<br>
+
+~~~
 !@NetOps
 nano req-jp.pem
 > paste VPN-JP's CSR
 > ctrl + s (save)
 > ctrl + x (exit
+~~~
 
+&nbsp;
+---
+&nbsp;
 
 8. Create Configuration files for each VPN Routers
+~~~
 !@NetOps
 nano vpnph.cnf
-###########
+~~~
 
+<br>
+
+~~~
 [ req ]
 default_bits       = 2048
 distinguished_name = req_distinguished_name
@@ -763,10 +791,11 @@ DNS.1   = rivan.ph
 DNS.2   = www.rivan.ph
 DNS.3   = api.rivan.ph
 IP.1    = 208.8.8.11
+~~~
 
-###########
+<br>
 
-
+~~~
 !@NetOps
 nano vpnjp.cnf
 ###########
@@ -793,36 +822,48 @@ DNS.1   = rivan.jp
 DNS.2   = www.rivan.jp
 DNS.3   = api.rivan.jp
 IP.1    = 208.8.8.12
+~~~
 
-###########
+&nbsp;
+---
+&nbsp;
 
-
-8. Sign the CSRs
+### 08. Sign the CSRs
+~~~
 !@NetOps
 openssl x509 -req -in req-ph.pem -CA ca-rivan.crt -CAkey rivan.key -out signed-ph.pem -extfile vpnph.cnf -extensions v3_req
 openssl x509 -req -in req-jp.pem -CA ca-rivan.crt -CAkey rivan.key -out signed-jp.pem -extfile vpnjp.cnf -extensions v3_req
+~~~
 
-Verify:
+<br>
 
+~~~
 !@NetOps
 cat signed-ph.pem
 cat signed-jp.pem
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-9. Import the signed CSRs
-
+### 09. Import the signed CSRs
+~~~
 !@VPN-PH, VPN-JP
 conf t
  crypto pki import rivantrust certificate
 
 > Paste the signed CSR
+~~~
 
+<br>
 
-Verify Cisco Certificates and Trustpoints
+### Verify Cisco Certificates and Trustpoints
+~~~
 !@VPNs
 show crypto pki certificates
 show crypto pki trustpoint
-
+~~~
 
 
 
