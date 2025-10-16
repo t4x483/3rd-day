@@ -533,68 +533,117 @@ Pass: pass
 ---
 &nbsp;
 
-#####
-Site-to-Site VPN (Signature)
-
+## Site-to-Site VPN (Signature)
 Deploy the following VMs:
 - NetOps
 
-NetOps
-- NetAdapter: NAT
-- NetAdapter 2: Bridge (Replicate)
-- NetAdapter 3: Host-only
-- NetAdapter 4: Host-only
+| VM        | NetAdapter | NetAdapter 2       | NetAdapter 3 | NetAdapter 4 |
+| ---       | ---        | ---                | ---          | ---          |
+| VPN-PH    | NAT        | Bridge (Replicate) | Host-Only    | Host-Only    |
 
-Login: root
-Pass: C1sc0123
+<br>
 
+Login: root  
+Pass: C1sc0123  
 
-Identify the NAT IP & connect via SecureCRT
+&nbsp;
+---
+&nbsp;
 
+### 01. Identify the NAT IP & connect via SecureCRT
+~~~
 !@NetOps
 ip -4 addr
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-Set a static IP address to connect to the LAN
+### 02. Set a static IP address to connect to the LAN
+~~~
 !@NetOps
-nmcli connection add type ethernet con-name static-net2 ifname ens192 ipv4.method manual ipv4.addresses 10.#$34T#.1.6/24 autoconnect yes
-nmcli connection up static-net2
+nmcli connection add type ethernet con-name TunayNaLAN \
+ifname ens192 \
+ipv4.method manual \
+ipv4.addresses \
+10.#$34T#.1.6/24 \
+autoconnect yes
 
-Set static routes
+nmcli connection up TunayNaLAN
+~~~
+
+&nbsp;
+---
+&nbsp;
+
+### 03. Set static routes
+~~~
 !@NetOps
 ip route add 10.0.0.0/8 via 10.#$34T#.1.4
 ip route add 200.0.0.0/24 via 10.#$34T#.1.4
+~~~
 
+<br>
+<br>
 
-Activity 02: Create a Selfsigned root CA with the following subject names
+---
+&nbsp;
+
+### Activity 02: Create a Selfsigned Certificate with the following subject names:
 For the CA (NetOps)
+- Country Name [XX]:                         PH
+- State or Province Name []:                 NCR
+- Locality Name [Default City]:              Makati
+- Organization Name [Default Company Ltd]:   Rivancorp
+- Organizational Unit Name (eg, section) []: HQ
+- Common Name []:                            rivan.com
+- Email Address []:                          admin@rivancorp.com
+- Subject Alt Names:                         rivan.com  www.rivan.com  api.rivan.com  10.#$34T#.1.6
 
-Country Name (2 letter code) [XX]:PH
-State or Province Name (full name) []:NCR
-Locality Name (eg, city) [Default City]:Makati
-Organization Name (eg, company) [Default Company Ltd]:Rivancorp
-Organizational Unit Name (eg, section) []:HQ
-Common Name (eg, your name or your server's hostname) []:rivan.com
-Email Address []:admin@rivancorp.com
+&nbsp;
+---
+&nbsp;
 
-1. Create a directory for the certstore
+### 01. Create a directory for the certstore
+~~~
 !@NetOps
 mkdir certstore
 cd certstore
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-2. Create a Private key with a Selfsigned Certificate (SSH keys:ssh-keygen vs TLS/SSL keys:openssl)
+### 02. Create a Private key with a Selfsigned Certificate (SSH keys:ssh-keygen vs TLS/SSL keys:openssl)
+~~~
 !@NetOps
 openssl req -x509 -newkey rsa:2048 -days 365 -keyout rivan.key -out ca-rivan.crt -nodes
+~~~
 
-Verify the certificate
+<br>
+
+Verify the certificate  
+
+~~~
 !@NetOps
 openssl x509 -in ca-rivan.crt -text -noout
+~~~
 
-3. Create a configuration file to specify subject alternate names.
-!@NetOps ext.cnf
-###########
+&nbsp;
+---
+&nbsp;
 
+### 03. Create a configuration file to specify subject alternate names.
+~~~
+!@NetOps
+nano ext.cnf
+~~~
+
+<br>
+
+~~~
 [ req ]
 default_bits       = 2048
 distinguished_name = req_distinguished_name
@@ -617,10 +666,13 @@ DNS.1   = rivan.com
 DNS.2   = www.rivan.com
 DNS.3   = api.rivan.com
 IP.1    = 10.#$34T#.1.6
+~~~
 
-###########
+&nbsp;
+---
+&nbsp;
 
-4. Generate root CA with subject alt names
+### 04. Generate root CA with subject alt names
 !@NetOps
 openssl req -x509 -newkey rsa:2048 -days 365 -keyout rivan.key -out ca-rivan.crt -nodes -config ext.cnf -extensions v3_req
 
