@@ -259,32 +259,21 @@ conf t
 &nbsp;
 
 ## Site-to-Site VPN (PSK)
+Deploy the following VMs  
+- CSR1000v  
+- YVM  
 
-Deploy the following VMs
-- CSR1000v
-- YVM
+| VM        | NetAdapter | NetAdapter 2 | NetAdapter 3 |
+| ---       | ---        | ---          | ---          |
+| VPN-PH    | NAT        | VMNet2       | VMNet3       |
+| VPN-JP    | NAT        | VMNet2       | VMNet4       |
+| BLDG-PH   | VMNet3     |              |              |
+| BLDG-JP-1 | VMNet4     |              |              |
+| BLDG-JP-2 | VMNet4     |              |              |
 
-VPN-PH
-- NetAdapter: NAT
-- NetAdapter 2: VMNet2
-- NetAdapter 3: VMNet3
+<br>
 
-VPN-JP
-- NetAdapter: NAT
-- NetAdapter 2: VMNet2
-- NetAdapter 3: VMNet4
-
-BLDG-PH
-- NetAdapter: VMNet3
-
-BLDG-JP-1
-- NetAdapter: VMNet4
-
-BLDG-JP-2
-- NetAdapter: VMNet4
-
-
-
+~~~
 !@VPN-PH
 conf t
  hostname VPN-PH
@@ -313,7 +302,12 @@ conf t
  ip http authentication local
  end
 wr
+!
+~~~
 
+<br>
+
+~~~
 !@VPN-JP
 conf t
  hostname VPN-JP
@@ -343,34 +337,128 @@ conf t
  ip http authentication local
  end
 wr
+!
+~~~
 
+<br>
+
+~~~
 !@BLDG-PH
 sudo su
 ifconfig eth0 11.11.11.100 netmask 255.255.255.224 up
 route add default gw 11.11.11.113
 ping 11.11.11.113
+~~~
 
+<br>
+
+~~~
 !@BLDG-JP-1
 sudo su
 ifconfig eth0 21.21.21.211 netmask 255.255.255.240 up
 route add default gw 21.21.21.213
 ping 21.21.21.213
+~~~
 
+<br>
+
+~~~
 !@BLDG-JP-2
 sudo su
 ifconfig eth0 22.22.22.221 netmask 255.255.255.192 up
 route add default gw 22.22.22.223
 ping 22.22.22.223
+~~~
+
+### Access GUI & Telnet Session
+VPN-PH:  https://192.168.102.11/  
+VPN-JP:  https://192.168.102.12/  
+
+<br>
+
+Login: admin  
+Pass: pass  
+
+<br>
+<br>
+
+---
+&nbsp;
+
+### Activity 01: Configure Site-to-Site Connectivity between `BLDG-PH` & `BLDG-JP-1`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+&nbsp;
+---
+&nbsp;
+
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+
+| Setting           | VPN-PH          | VPN-JP          |
+| ---               | ---             | ---             |
+| Encryption        | AES-256         | AES-256         |
+| Integrity         | SHA-512         | SHA-512         |
+| DH Group          | 14              | 14              |
+| Tunnel IP         | 172.16.10.1     | 172.16.10.2     |
+| Tunnel NetMask    | 255.255.255.252 | 255.255.255.252 |
+| Source Interface  | Gig 1           | Gig 1           |
+| Remote Peer IP    | 208.8.8.12      | 208.8.8.11      |
+| PSK               | C1sc0123        | C1sc0123        |
+| Remote Subnets    | 21.21.21.208    | 11.11.11.96     |
+| Remote SubnetMask | 255.255.255.240 | 255.255.255.224 |
+
+</details>
 
 
-#####
-Access GUI & Telnet Session
-- https://192.168.102.11 (VPN-PH)
-- https://192.168.102.12 (VPN-JP)
 
 
-Activity 01: Configure Site-to-Site Connectivity between BLDG-PH & BLDG-JP-1 & View packets.
-Verify by ICMP & SSH
+
+
+
+
+
+
+
 
 
 
