@@ -361,7 +361,7 @@ nmcli connection up static-net2
 Set static routes
 !@NetOps
 ip route add 10.0.0.0/8 via 10.#$34T#.1.4
-ip route add 200.0.0.0/24 via 10.#$34T.1.4
+ip route add 200.0.0.0/24 via 10.#$34T#.1.4
 
 
 Activity 02: Create a Selfsigned root CA with the following subject names
