@@ -1,1 +1,1 @@
-![VPN](img/S2S-BLANK.png)
+![VPN](img/S2S-Blank.png)
