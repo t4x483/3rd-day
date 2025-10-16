@@ -1,7 +1,7 @@
 
 <!-- Your Monitor Number == #$34T# -->
 
-## Configure Multisite Connectivity
+### Configure Multisite Connectivity
 ~~~
 !@EDGE
 conf t
@@ -32,6 +32,8 @@ conf t
  end
 ~~~
 
+<br>
+
 ~~~
 !@EDGE
 conf t
@@ -44,6 +46,8 @@ conf t
   ip ospf network point-to-point
   end
 ~~~
+
+<br>
 
 ~~~
 !@CoreBABA
@@ -58,6 +62,8 @@ conf t
   end 
 ~~~
 
+<br>
+
 ~~~
 !@CUCM
 conf t
@@ -67,30 +73,40 @@ conf t
   end
 ~~~
 
+<br>
+
 ~~~
 !@windowsCMD
 route  add   10.0.0.0   mask   255.0.0.0    10.#$34T#.1.4
 route  add  200.0.0.0   mask  255.255.255.0   10.#$34T#.1.4
 ~~~
 
+<br>
+<br>
 
+---
+&nbsp;
 
-#####
-Internet Connectivity
-
+### Establish Internet Connectivity
+~~~
 !@EDGE
 ping 200.0.0.1
 !
 conf t
  ip route 0.0.0.0 0.0.0.0 200.0.0.1
  end
+~~~
 
+<br>
 
-Configure NAT
+Configure Network Address Translation
 1. Define INSIDE & OUTSIDE
 2. Match Traffic
 3. Define Translations
 
+<br>
+
+~~~
 !@EDGE
 conf t
  int lo0
@@ -102,7 +118,11 @@ conf t
  int g0/0/1
   ip nat outside
   end
+~~~
 
+<br>
+
+~~~
 !@EDGE
 conf t
  ip access-list extended NAT-POLICY
@@ -127,22 +147,35 @@ conf t
   no deny ip 10.#$34T#.0.0 0.0.255.255 10.#$34T#.0.0 0.0.255.255
   permit ip any any
   end
+~~~
 
+<br>
+
+~~~
 !@EDGE
 conf t
  ip nat inside source list NAT-POLICY int g0/0/1 overload
  end
+~~~
 
+<br>
+
+~~~
 !@EDGE
 conf t
  ip domain lookup
  ip name-server 10.#$34T#.1.8 10.#$34T#.1.10
  end
+~~~
 
+<br>
+<br>
 
-#####
-Virtual Private Network
+---
+&nbsp;
 
+### Multipoint Generic Routing Encapsulation
+~~~
 !@EDGE
 conf t
  int tun1
@@ -174,7 +207,11 @@ conf t
   ip nhrp map 172.16.1.92 200.0.0.92
   no ip nhrp map 172.16.1.#$34T# 200.0.0.#$34T#
   end
+~~~
 
+<br>
+
+~~~
 !@EDGE
 conf t
  ip route 10.11.0.0 255.255.0.0 172.16.1.11 252
@@ -198,7 +235,11 @@ conf t
  !
  no ip route 10.#$34T#.0.0 255.255.0.0 172.16.1.#$34T# 252
  end
+~~~
 
+<br>
+
+~~~
 !@EDGE
 conf t
  no router ospf 1
@@ -208,7 +249,7 @@ conf t
   network #$34T#.0.0.1 0.0.0.0 area #$34T#
   default-information originate
   end
-
+~~~
 
 
 
