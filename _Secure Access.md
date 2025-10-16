@@ -1,7 +1,7 @@
 
 <!-- Your Monitor Number == #$34T# -->
 
-### Configure Multisite Connectivity
+## Configure Multisite Connectivity
 ~~~
 !@EDGE
 conf t
@@ -37,6 +37,7 @@ conf t
 ~~~
 !@EDGE
 conf t
+ no router ospf 1
  router ospf 1
   router-id #$34T#.0.0.1
   network 200.0.0.0 0.0.0.255 area 0
@@ -53,6 +54,7 @@ conf t
 !@CoreBABA
 conf t
  ip routing
+ no router ospf 1
  router ospf 1
   router-id 10.#$34T#.#$34T#.4
   network 10.#$34T#.0.0 0.0.255.255 area #$34T#
@@ -67,6 +69,7 @@ conf t
 ~~~
 !@CUCM
 conf t
+ no router ospf 1
  router ospf 1
   router-id 10.#$34T#.100.8
   network 10.#$34T#.100.0 0.0.0.255 area #$34T#
@@ -251,12 +254,11 @@ conf t
   end
 ~~~
 
+&nbsp;
+---
+&nbsp;
 
-
-
-
-#####
-Site-to-Site VPN (PSK)
+## Site-to-Site VPN (PSK)
 
 Deploy the following VMs
 - CSR1000v
