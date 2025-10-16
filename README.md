@@ -1,2 +1,1 @@
-# Rivan_Day4
-Network Security Fundamentals, Network Automation Tools, IP Services
+![VPN](img/S2S-BLANK.png)
