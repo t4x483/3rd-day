@@ -449,20 +449,13 @@ Pass: pass
 
 </details>
 
+<br>
+<br>
 
+---
+&nbsp;
 
-
-
-
-
-
-
-
-
-
-
-
-Exercise 01: Configure Site-to-Site VPN for BLDG-PH, BLDG-JP-1, BLDG-JP-2
+### Exercise 01: Configure Site-to-Site VPN for BLDG-PH, BLDG-JP-1, BLDG-JP-2
 
 
 
