@@ -1,8 +1,8 @@
 
 <!-- Your Monitor Number == #$34T# -->
 
-Site-to-Site Connectivity
-
+## Configure Multisite Connectivity
+~~~
 !@EDGE
 conf t
  hostname EDGE-#$34T#
@@ -30,11 +30,9 @@ conf t
   ip add #$34T#.0.0.1 255.255.255.255
   desc VIRTUALIP
  end
+~~~
 
-
-#####
-MetroEthernet/Leased Line
-
+~~~
 !@EDGE
 conf t
  router ospf 1
@@ -45,7 +43,9 @@ conf t
  int gi 0/0/0
   ip ospf network point-to-point
   end
+~~~
 
+~~~
 !@CoreBABA
 conf t
  ip routing
@@ -56,17 +56,23 @@ conf t
  int gi 0/1
   ip ospf network point-to-point
   end 
+~~~
 
+~~~
 !@CUCM
 conf t
  router ospf 1
   router-id 10.#$34T#.100.8
   network 10.#$34T#.100.0 0.0.0.255 area #$34T#
   end
+~~~
 
+~~~
 !@windowsCMD
 route  add   10.0.0.0   mask   255.0.0.0    10.#$34T#.1.4
 route  add  200.0.0.0   mask  255.255.255.0   10.#$34T#.1.4
+~~~
+
 
 
 #####
