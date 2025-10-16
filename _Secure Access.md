@@ -370,6 +370,10 @@ route add default gw 22.22.22.223
 ping 22.22.22.223
 ~~~
 
+&nbsp;
+---
+&nbsp;
+
 ### Access GUI & Telnet Session
 VPN-PH:  https://192.168.102.11/  
 VPN-JP:  https://192.168.102.12/  
@@ -386,6 +390,8 @@ Pass: pass
 &nbsp;
 
 ### Activity 01: Configure Site-to-Site Connectivity between `BLDG-PH` & `BLDG-JP-1`
+
+![VPN](img/S2S-Blank.png)
 
 <br>
 <br>
@@ -457,9 +463,75 @@ Pass: pass
 
 ### Exercise 01: Configure Site-to-Site VPN for BLDG-PH, BLDG-JP-1, BLDG-JP-2
 
+![VPN](<img/S2S-ADV (IP).png>)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
+&nbsp;
+---
+&nbsp;
 
+### ANSWER
+
+<details>
+<summary>Show Answer</summary>
+
+| Setting           | VPN-PH          | VPN-JP          |
+| ---               | ---             | ---             |
+| Encryption        |                 |                 |
+| Integrity         |                 |                 |
+| DH Group          |                 |                 |
+| Tunnel IP         |                 |                 |
+| Tunnel NetMask    |                 |                 |
+| Source Interface  |                 |                 |
+| Remote Peer IP    |                 |                 |
+| PSK               |                 |                 |
+| Remote Subnets    |                 |                 |
+| Remote SubnetMask |                 |                 |
+
+</details>
+
+<br>
+<br>
+
+---
+&nbsp;
 
 #####
 Site-to-Site VPN (Signature)
