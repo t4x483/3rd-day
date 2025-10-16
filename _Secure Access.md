@@ -533,7 +533,7 @@ Pass: pass
 ---
 &nbsp;
 
-## Site-to-Site VPN (Signature)
+## Site-to-Site VPN (Signature) - ROOT CA
 Deploy the following VMs:
 - NetOps
 
@@ -856,7 +856,9 @@ conf t
 > Paste the signed CSR
 ~~~
 
-<br>
+&nbsp;
+---
+&nbsp;
 
 ### Verify Cisco Certificates and Trustpoints
 ~~~
@@ -865,15 +867,16 @@ show crypto pki certificates
 show crypto pki trustpoint
 ~~~
 
+<br>
+<br>
 
+---
+&nbsp;
 
+## Site-to-Site VPN (Sign)
 
-
-
-#####
-Site-to-Site VPN (Sign)
-
-1. GRE Tunnel
+### 01. GRE Tunnel
+~~~
 !@VPN-PH
 conf t
  int tun1
@@ -882,7 +885,11 @@ conf t
   tunnel destination 208.8.8.12
   tunnel mode gre ip
   end
+~~~
 
+<br>
+
+~~~
 !@VPN-JP
 conf t
  int tun1
@@ -891,22 +898,36 @@ conf t
   tunnel destination 208.8.8.11
   tunnel mode gre ip
   end
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-2. Routing Interesting traffic
+### 02. Routing Interesting traffic
+~~~
 !@VPN-PH
 conf t
  ip route 21.21.21.208 255.255.255.240 172.16.10.2
  ip route 22.22.22.192 255.255.255.192 172.16.10.2
  end
- 
+~~~
+
+<br>
+
+~~~
 !@VPN-JP
 conf t
  ip route 11.11.11.96 255.255.255.224 172.16.10.1
  end
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-3. Configure ISAKMP Policy
+### 03. Configure ISAKMP Policy
+~~~
 !@VPN-PH, VPN-JP
 conf t
  crypto isakmp policy 1
@@ -915,9 +936,14 @@ conf t
   hash sha512
   group 14
   end
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-4. Configure IPSec Profile
+### 04. Configure IPSec Profile
+~~~
 !@VPN-PH, VPN-JP
 conf t
  crypto ipsec transform-set IPSECTUNNEL esp-aes 256 esp-sha-hmac
@@ -927,21 +953,48 @@ conf t
   set transform-set IPSECTUNNEL
   set pfs group14
   end
+~~~
 
+&nbsp;
+---
+&nbsp;
 
-5 Apply IPSec Profile Protection to Tunnel
-
+### 05. Apply IPSec Profile Protection to Tunnel
+~~~
 !@VPN-PH, VPN-JP
 conf t
  int tunnel 1
   tunnel protection ipsec profile RIVAN 
   end
+~~~
 
+<br>
 
 Verify:
+~~~
 !@VPN-PH, VPN-JP
 show crypto isakmp sa
 show crypto ipsec sa
+~~~
+
+<br>
+<br>
+
+---
+&nbsp;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
