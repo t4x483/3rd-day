@@ -167,9 +167,6 @@ route add default gw 22.22.22.223
 ping 22.22.22.223
 
 
-
-
-
 _____________________
 ********************* Deploy CA Server & Issue Certificates
 
@@ -183,24 +180,69 @@ NetOps VM
 	Pass: C1sc0123
 	
 
-1. Configure IP addressing for NetAdapter 2 (Verify MAC ADDRESS of interface)
+1. Set a Persistent Static IP address on Linux (Verify MAC ADDRESS of interface)
+
+nmcli connection add
+    type ethernet
+    con-name "static-net2"
+    ifname ens192 
+    ipv4.method manual 
+    ipv4.addresses 192.168.102.100/24 
+    ipv4.gateway 192.168.102.0/24 
+    ipv4.dns "8.8.8.8,8.8.4.4" 
+    ipv4.routes "192.168.102.0/24 0.0.0.0" 
+    autoconnect yes
 
 !@NetOps
-ifconfig ens224 192.168.102.100 netmask 255.255.255.0 up
+nmcli connection add type ethernet con-name "static-net2" ifname ens192 ipv4.method manual ipv4.addresses 192.168.102.100/24  autoconnect yes
+nmcli connection up static-net2
 
-
-2. Create a directory for keys and certificates.
+2. Allow Firewall Rule
 
 !@NetOps
-cd
+firewall-cmd --permanent --zone=public --add-service=http
+firewall-cmd --permanent --add-port=3000/tcp
+firewall-cmd --reload
+
+or disable firewall(Not Recommended)
+
+!@NetOps
+systemctl disable --now firewalld
+
+
+3. Create User Account
+
+!@NetOps
+adduser admin -g wheel
+passwd admin
+> pass
+> pass
+
+cd /home/admin
+
+
+4. Create a directory for keys and certificates.
+
+!@NetOps
 mkdir keystore
 cd keystore
 
-3. Create a Private key with a Selfsigned Certificate (x509)
+
+3. Create a Private key with a Selfsigned Certificate (SSH keys:ssh-keygen vs TLS/SSL keys:openssl)
 
 !@NetOps
-openssl req -x509 -newkey rsa:2048 -days 365 -keyout key-rivan.pem -out ca-rivan.pem -nodes
+openssl req -x509 -newkey rsa:2048 -days 365 -keyout rivan.key -out ca-rivan.crt -nodes
 
+or 
+
+!@NetOps
+ssh-keygen -t rsa -b 2048 -f rivan.key
+
+vs
+
+openssl genpkey -algorithm RSA -out rivan.key -pkeyopt rsa_keygen_bits:2048
+
+openssl req -new -x509 -key rivan.key -out ca-rivan.crt -days 365
 
 Sample Output:
 -----
@@ -216,13 +258,51 @@ Email Address []:admin@rivancorp.com
 Include -subj information so that no prompts appear:
 
 !@NetOps
--subj "/C=PH/ST=NCR/L=Makati/O=Rivancorp/OU=HQ/CN=rivan.com/emailAddress=admin@rivancorp.com/subjectAltName=DNS:rivan.com,DNS:www.rivan.com,IP:192.168.102.100,DNS:software.rivan.com"
+-subj "/C=PH/ST=NCR/L=Makati/O=Rivancorp/OU=HQ/CN=rivan.com/emailAddress=admin@rivancorp.com" \
+-addext "subjectAltName=DNS:rivan.com,DNS:www.rivan.com,IP:192.168.102.100,DNS:software.rivan.com"
+
+
+or
+
+From a template built-in from openssl /etc/pki/tls/openssl.cnf
+
+/////////
+[ req ]
+default_bits       = 2048
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_req
+prompt             = no
+
+[ req_distinguished_name ]
+C  = PH
+ST = Metro Manila
+L  = Quezon City
+O  = MyOrganization
+OU = IT Department
+CN = example.com
+
+[ v3_req ]
+subjectAltName = @alt_names
+
+[ alt_names ]
+DNS.1   = example.com
+DNS.2   = www.example.com
+DNS.3   = api.example.com
+IP.1    = 192.168.1.10
+IP.2    = 10.0.0.5
+/////////
+
+
+!@NetOps
+openssl req -new -x509 -key rivan.key -out ca-rivan.crt -days 365 \
+-config san.cnf -extensions v3_req
 
 
 Display Certificate Info
-
 !@NetOps
 openssl x509 -in ca-rivan.pem -noout -text
+
+
 
 
 
