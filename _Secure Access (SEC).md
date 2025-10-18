@@ -1,11 +1,11 @@
 
-<!-- Your Monitor Number == #$34T# -->
+<!-- Your Monitor Number == 31 -->
 
 ## 🏦 Configure Multisite Connectivity
 ~~~
 !@EDGE
 conf t
- hostname EDGE-#$34T#
+ hostname EDGE-31
  enable secret pass
  service password-encryption
  no logging console
@@ -20,14 +20,14 @@ conf t
   exec-timeout 0 0
  int gi 0/0/0
   no shut
-  ip add 10.#$34T#.#$34T#.1 255.255.255.0
+  ip add 10.31.31.1 255.255.255.0
   desc INSIDE
  int gi 0/0/1
   no shut
-  ip add 200.0.0.#$34T# 255.255.255.0
+  ip add 200.0.0.31 255.255.255.0
   desc OUTSIDE
  int loopback 0
-  ip add #$34T#.0.0.1 255.255.255.255
+  ip add 31.0.0.1 255.255.255.255
   desc VIRTUALIP
  end
 ~~~
@@ -39,10 +39,10 @@ conf t
 conf t
  no router ospf 1
  router ospf 1
-  router-id #$34T#.0.0.1
+  router-id 31.0.0.1
   network 200.0.0.0 0.0.0.255 area 0
-  network 10.#$34T#.#$34T#.0 0.0.0.255 area #$34T#
-  network #$34T#.0.0.1 0.0.0.0 area #$34T#
+  network 10.31.31.0 0.0.0.255 area 31
+  network 31.0.0.1 0.0.0.0 area 31
  int gi 0/0/0
   ip ospf network point-to-point
   end
@@ -56,8 +56,8 @@ conf t
  ip routing
  no router ospf 1
  router ospf 1
-  router-id 10.#$34T#.#$34T#.4
-  network 10.#$34T#.0.0 0.0.255.255 area #$34T#
+  router-id 10.31.31.4
+  network 10.31.0.0 0.0.255.255 area 31
   exit
  int gi 0/1
   ip ospf network point-to-point
@@ -71,8 +71,8 @@ conf t
 conf t
  no router ospf 1
  router ospf 1
-  router-id 10.#$34T#.100.8
-  network 10.#$34T#.100.0 0.0.0.255 area #$34T#
+  router-id 10.31.100.8
+  network 10.31.100.0 0.0.0.255 area 31
   end
 ~~~
 
@@ -80,8 +80,8 @@ conf t
 
 ~~~
 !@windowsCMD
-route  add   10.0.0.0   mask   255.0.0.0    10.#$34T#.1.4
-route  add  200.0.0.0   mask  255.255.255.0   10.#$34T#.1.4
+route  add   10.0.0.0   mask   255.0.0.0    10.31.1.4
+route  add  200.0.0.0   mask  255.255.255.0   10.31.1.4
 ~~~
 
 <br>
@@ -129,25 +129,25 @@ conf t
 !@EDGE
 conf t
  ip access-list extended NAT-POLICY
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.11.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.12.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.21.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.22.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.31.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.32.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.41.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.42.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.51.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.52.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.61.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.62.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.71.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.72.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.81.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.82.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.91.0.0 0.0.255.255
-  deny ip 10.#$34T#.0.0 0.0.255.255 10.92.0.0 0.0.255.255
-  no deny ip 10.#$34T#.0.0 0.0.255.255 10.#$34T#.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.11.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.12.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.21.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.22.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.31.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.32.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.41.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.42.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.51.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.52.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.61.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.62.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.71.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.72.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.81.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.82.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.91.0.0 0.0.255.255
+  deny ip 10.31.0.0 0.0.255.255 10.92.0.0 0.0.255.255
+  no deny ip 10.31.0.0 0.0.255.255 10.31.0.0 0.0.255.255
   permit ip any any
   end
 ~~~
@@ -167,7 +167,7 @@ conf t
 !@EDGE
 conf t
  ip domain lookup
- ip name-server 10.#$34T#.1.8 10.#$34T#.1.10
+ ip name-server 10.31.1.10
  end
 ~~~
 
@@ -182,7 +182,7 @@ conf t
 !@EDGE
 conf t
  int tun1
-  ip add 172.16.1.#$34T# 255.255.255.0
+  ip add 172.16.1.31 255.255.255.0
   tunnel source g0/0/1
   tunnel mode gre multipoint
   no shut
@@ -208,7 +208,7 @@ conf t
   ip nhrp map 172.16.1.82 200.0.0.82
   ip nhrp map 172.16.1.91 200.0.0.91
   ip nhrp map 172.16.1.92 200.0.0.92
-  no ip nhrp map 172.16.1.#$34T# 200.0.0.#$34T#
+  no ip nhrp map 172.16.1.31 200.0.0.31
   end
 ~~~
 
@@ -236,7 +236,7 @@ conf t
  ip route 10.91.0.0 255.255.0.0 172.16.1.91 252
  ip route 10.92.0.0 255.255.0.0 172.16.1.92 252
  !
- no ip route 10.#$34T#.0.0 255.255.0.0 172.16.1.#$34T# 252
+ no ip route 10.31.0.0 255.255.0.0 172.16.1.31 252
  end
 ~~~
 
@@ -247,9 +247,9 @@ conf t
 conf t
  no router ospf 1
  router ospf 1
-  router-id #$34T#.0.0.1
-  network 10.#$34T#.#$34T#.0 0.0.0.255 area #$34T#
-  network #$34T#.0.0.1 0.0.0.0 area #$34T#
+  router-id 31.0.0.1
+  network 10.31.31.0 0.0.0.255 area 31
+  network 31.0.0.1 0.0.0.0 area 31
   default-information originate
   end
 ~~~
@@ -567,7 +567,7 @@ nmcli connection add type ethernet con-name TunayNaLAN \
 ifname ens192 \
 ipv4.method manual \
 ipv4.addresses \
-10.#$34T#.1.6/24 \
+10.31.1.6/24 \
 autoconnect yes
 
 nmcli connection up TunayNaLAN
@@ -580,8 +580,8 @@ nmcli connection up TunayNaLAN
 ### 03. Set static routes
 ~~~
 !@NetOps
-ip route add 10.0.0.0/8 via 10.#$34T#.1.4
-ip route add 200.0.0.0/24 via 10.#$34T#.1.4
+ip route add 10.0.0.0/8 via 10.31.1.4
+ip route add 200.0.0.0/24 via 10.31.1.4
 ~~~
 
 <br>
@@ -599,7 +599,7 @@ For the CA (NetOps)
 - Organizational Unit Name (eg, section) []: HQ
 - Common Name []:                            rivan.com
 - Email Address []:                          admin@rivancorp.com
-- Subject Alt Names:                         rivan.com  www.rivan.com  api.rivan.com  10.#$34T#.1.6
+- Subject Alt Names:                         rivan.com  www.rivan.com  api.rivan.com  10.31.1.6
 
 &nbsp;
 ---
@@ -665,7 +665,7 @@ subjectAltName = @alt_names
 DNS.1   = rivan.com
 DNS.2   = www.rivan.com
 DNS.3   = api.rivan.com
-IP.1    = 10.#$34T#.1.6
+IP.1    = 10.31.1.6
 ~~~
 
 &nbsp;
@@ -1307,7 +1307,7 @@ config t
  ip host www.web311.com 192.168.103.11
  end
 
-Review: Create a DNS A record for www.ccna#$34T#.com
+Review: Create a DNS A record for www.ccna31.com
 192.168.103.10 www.web310.com
 192.168.103.11 www.web311.com
   
@@ -1370,7 +1370,7 @@ conf t
 
 
 
-1. Make the www.rivan#$34T#.com accessible via port 8080
+1. Make the www.rivan31.com accessible via port 8080
 
 2. Make the VM Jumpserver, accessible via port 
 -Well-known ports (0-1023) - reserved for known services
@@ -1452,6 +1452,9 @@ Now hide behind the firewall.
 @UTM-PH
 config t
 IP Nat inside source static tcp 192.168.103.21 80 208.8.8.101 8080
+IP Nat inside source static tcp 192.168.103.21 443 208.8.8.101 8443
+IP Nat inside source static tcp 192.168.103.21 80 208.8.8.101 80
+IP Nat inside source static tcp 192.168.103.21 443 208.8.8.101 8443
 end
 show ip nat translation
 
